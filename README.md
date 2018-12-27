@@ -18,8 +18,8 @@ The videos themselves are stored in `data/originals`.
 
 ### Requirements
 - Python 3
+- Numpy
 - PyAV
-- Pillow (python lib)
 - ffmpeg
 
 ### Notes

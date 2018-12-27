@@ -4,7 +4,7 @@ from videos_processing import Video
 
 class TestVideo(unittest.TestCase):
     def test_scenes(self):
-        video = Video("two_scenes.mp4")
+        video = Video("tests/two_scenes.mp4")
 
         self.assertEqual(len(video.scenes), 2)
 

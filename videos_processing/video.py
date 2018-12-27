@@ -1,35 +1,44 @@
 import av
+import numpy
+
+from .scene import Scene
+
+GRAY = 75 # RGB Value
+TOLERANCE = 10 # Allowable distance from GRAY
 
 class Video:
     def __init__(self, filename):
         self.filename = filename
-        self.scenes = _load_scenes(filename)
+        self.scenes = load_scenes(filename)
 
-    def _load_scenes(filename):
-        """
-        Return a Video representing the given file.
+def load_scenes(filename):
+    """
+    Return a Video representing the given file.
 
-        filename: the path to the video file to process.
-        """
-        container = av.open(filename)
+    filename: the path to the video file to process.
+    """
+    container = av.open(filename)
 
-        scenes = []
-        current_scene_start = 0
-        previous_is_blank = True
+    scenes = []
+    current_scene_start = 0
+    previous_is_blank = True
 
-        for frame in container.decode(video=0):
-            blank = _is_blank(frame)
+    for frame in container.decode(video=0):
+        blank = is_blank(frame)
 
-            if blank and not previous_is_blank:
-                # End scene
-                scenes.append(Scene(current_scene_start, frame.time))
-            elif not blank and previous_is_blank:
-                # Start a new scene
-                current_scene_start = frame.time
+        if blank and not previous_is_blank:
+            # End scene
+            scenes.append(Scene(current_scene_start, frame.time))
+        elif not blank and previous_is_blank:
+            # Start a new scene
+            current_scene_start = frame.time
 
-            previous_is_blank = blank
+        previous_is_blank = blank
 
-        return
+    return scenes
 
-    def _is_blank(frame):
-        return False
+def is_blank(frame):
+    pixels = frame.to_rgb().to_ndarray().astype(numpy.int8)
+    # uint8 -> int8 to prevent overflow.
+
+    return (numpy.absolute(pixels - GRAY) < TOLERANCE).all()
