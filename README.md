@@ -16,7 +16,13 @@ The videos themselves are stored in `data/originals`.
 2. Generate thumbnails.
 3. Generate `index.html` from `index.json`.
 
-## Notes
+### Requirements
+- Python 3
+- PyAV
+- Pillow (python lib)
+- ffmpeg
+
+### Notes
 
 Use [media fragment](https://www.w3.org/TR/media-frags/) to specify video
 segments: `#t=start,end`.
