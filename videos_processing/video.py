@@ -1,5 +1,6 @@
 import av
 import numpy
+import math
 
 from .scene import Scene
 
@@ -10,6 +11,12 @@ class Video:
     def __init__(self, filename):
         self.filename = filename
         self.scenes = load_scenes(filename)
+
+    def to_dict(self):
+        return {
+            "filename": self.filename,
+            "scenes": [s.to_dict() for s in self.scenes]
+        }
 
 def load_scenes(filename):
     """
@@ -28,12 +35,17 @@ def load_scenes(filename):
 
         if blank and not previous_is_blank:
             # End scene
-            scenes.append(Scene(current_scene_start, frame.time))
+            scenes.append(Scene(current_scene_start, math.ceil(frame.time)))
         elif not blank and previous_is_blank:
             # Start a new scene
-            current_scene_start = frame.time
+            current_scene_start = max(math.floor(frame.time) - 1, 0)
 
         previous_is_blank = blank
+        previous_frame = frame
+
+    # If the video ended on a non-blank frame then add the last scene
+    if not previous_is_blank:
+        scenes.append(Scene(current_scene_start, None))
 
     return scenes
 

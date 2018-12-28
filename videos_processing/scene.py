@@ -6,3 +6,13 @@ class Scene:
         self.location = location
         self.people = people
         self.description = description
+
+    def to_dict(self):
+        return {
+            "start_second": self.start_second,
+            "end_second": self.end_second,
+            "date": self.date,
+            "location": self.location,
+            "people": self.people,
+            "description": self.description,
+        }
