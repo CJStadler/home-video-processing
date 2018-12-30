@@ -23,6 +23,7 @@ class TestVideo(unittest.TestCase):
                 {
                     "start_second": 0,
                     "end_second": 5,
+                    "thumbnail_second": None,
                     "date": None,
                     "location": None,
                     "people": [],
@@ -31,6 +32,7 @@ class TestVideo(unittest.TestCase):
                 {
                     "start_second": 11,
                     "end_second": None,
+                    "thumbnail_second": None,
                     "date": None,
                     "location": None,
                     "people": [],
