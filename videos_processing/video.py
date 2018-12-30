@@ -1,6 +1,7 @@
 import av
 import numpy
 import math
+from pathlib import Path
 
 from .scene import Scene
 
@@ -9,8 +10,8 @@ TOLERANCE = 10 # Allowable distance from GRAY
 
 class Video:
     def __init__(self, filename):
-        self.filename = filename
         self.scenes = load_scenes(filename)
+        self.filename = Path(filename).name
 
     def to_dict(self):
         return {
@@ -19,11 +20,6 @@ class Video:
         }
 
 def load_scenes(filename):
-    """
-    Return a Video representing the given file.
-
-    filename: the path to the video file to process.
-    """
     container = av.open(filename)
 
     scenes = []
