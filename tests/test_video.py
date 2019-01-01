@@ -1,4 +1,5 @@
 import unittest
+import math
 
 from videos_processing import Video
 
@@ -16,8 +17,26 @@ class TestVideo(unittest.TestCase):
         self.assertEqual(scene2.start_second, 11)
         self.assertEqual(scene2.end_second, None)
 
+    def test_thumbnail_frames(self):
+        times = [3, 13]
+        data = self._base_dict()
+
+        for i, t in enumerate(times):
+            data["scenes"][i]["thumbnail_second"] = t
+
+        video = Video.from_dict(data)
+        frames = video.thumbnail_frames()
+
+        self.assertEqual([math.floor(f.time) for f in frames], times)
+
     def test_to_dict(self):
-        expected = {
+        self.assertEqual(VIDEO.to_dict(), self._base_dict())
+
+    def test_from_dict(self):
+        self.assertEqual(Video.from_dict(self._base_dict()).to_dict(), self._base_dict())
+
+    def _base_dict(self):
+        return {
             "filename": FILENAME,
             "scenes": [
                 {
@@ -40,5 +59,3 @@ class TestVideo(unittest.TestCase):
                 }
             ]
         }
-
-        self.assertEqual(VIDEO.to_dict(), expected)

@@ -20,6 +20,7 @@ The videos themselves are stored in `data/originals`.
 - Python 3
 - Numpy
 - PyAV
+- Pillow (python lib)
 - ffmpeg
 
 ### Notes

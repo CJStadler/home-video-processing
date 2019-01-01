@@ -1,7 +1,6 @@
 import av
 import numpy
 import math
-from pathlib import Path
 
 from .scene import Scene
 
@@ -9,15 +8,41 @@ GRAY = 75 # RGB Value
 TOLERANCE = 10 # Allowable distance from GRAY
 
 class Video:
-    def __init__(self, filename):
-        self.scenes = load_scenes(filename)
-        self.filename = Path(filename).name
+    def from_dict(video_data):
+        scenes = [Scene.from_dict(s) for s in video_data["scenes"]]
+        return Video(video_data["filename"], scenes=scenes)
+
+    def __init__(self, filename, scenes=None):
+        if scenes:
+            self.scenes = scenes
+        else:
+            self.scenes = load_scenes(filename)
+
+        self.filename = filename
 
     def to_dict(self):
         return {
             "filename": self.filename,
             "scenes": [s.to_dict() for s in self.scenes]
         }
+
+    def thumbnail_frames(self):
+        container = av.open(self.filename)
+        frame_generator = container.decode(video=0)
+
+        thumbnail_times = sorted([s.thumbnail_second for s in self.scenes if s.thumbnail_second])
+        thumbnail_frames = []
+
+        current_frame = next(frame_generator)
+
+        for second in thumbnail_times:
+            while current_frame.time < second:
+                current_frame = next(frame_generator)
+
+            thumbnail_frames.append(current_frame)
+
+        return thumbnail_frames
+
 
 def load_scenes(filename):
     container = av.open(filename)
