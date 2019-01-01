@@ -1,6 +1,7 @@
 import av
 import numpy
 import math
+from pathlib import Path
 
 from .scene import Scene
 
@@ -20,8 +21,11 @@ class Video:
 
         self.filename = filename
 
-    def title(self):
-        return self.filename.split("/")[-1].replace('_', ' ').replace('.mp4', '')
+    def display_name(self):
+        return self.name().replace('_', ' ')
+
+    def name(self):
+        return Path(self.filename).stem
 
     def to_dict(self):
         return {

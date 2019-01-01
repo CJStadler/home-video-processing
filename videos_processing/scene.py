@@ -13,7 +13,12 @@ class Scene:
     def __init__(self, start_second, end_second, thumbnail_second=None, date=None, location=None, people=[], description=""):
         self.start_second = start_second
         self.end_second = end_second
-        self.thumbnail_second = thumbnail_second
+
+        if thumbnail_second:
+            self.thumbnail_second = thumbnail_second
+        else:
+            self.thumbnail_second = start_second + 2
+
         self.date = date
         self.location = location
         self.people = people

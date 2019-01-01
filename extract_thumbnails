@@ -2,6 +2,7 @@
 
 import json
 import math
+import datetime
 from pathlib import Path
 
 from videos_processing import Video
@@ -15,21 +16,21 @@ if __name__ == "__main__":
     parser.add_argument('video_filename',
         help='The filename of the video.')
     parser.add_argument('thumbnails_directory',
-        help='The name of the directory to put thumbnails in. This will be created if it does not exist.')
+        help='The name of the directory to put thumbnails in. A sub-directory will be created here for the thumbnails for this video.')
 
     args = parser.parse_args()
-
-    thumbnails_directory = Path(args.thumbnails_directory)
-    thumbnails_directory.mkdir(exist_ok=True)
 
     with open(args.metadata_filename) as file:
         video_data = json.load(file)
 
     video = Video.from_dict(video_data)
 
+    thumbnails_directory = Path(args.thumbnails_directory) / video.name()
+    thumbnails_directory.mkdir(exist_ok=True)
+
     frames = video.thumbnail_frames()
 
     for frame in frames:
         image = frame.to_image()
-        # TODO: reformat size
+        image = image.resize((180, 120)) # Assumes original is 720x480
         image.save(thumbnails_directory / "{}.jpeg".format(math.floor(frame.time)))

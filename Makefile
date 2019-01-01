@@ -9,7 +9,7 @@ $(METADATA_DIR)/%.json: $(VIDEOS_DIR)/%.mp4
 	./extract_scenes $< $@
 
 $(THUMBNAILS_DIR)/%: $(METADATA_DIR)/%.json $(VIDEOS_DIR)/%.mp4
-	./extract_thumbnails $^ $@
+	./extract_thumbnails $^ $(THUMBNAILS_DIR)
 
 index.html: $(METADATAS) $(THUMBNAILS)
 	./generate_html $(METADATA_DIR) $(THUMBNAILS_DIR) index.html.mako index.html
