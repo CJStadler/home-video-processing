@@ -9,7 +9,7 @@ from videos_processing import Video
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(description='Extract scenes data from a video.')
+    parser = argparse.ArgumentParser(description='Extract a thumbnail from each scene of a video.')
     parser.add_argument('metadata_filename',
         help='The filename of the metadata.')
     parser.add_argument('video_filename',

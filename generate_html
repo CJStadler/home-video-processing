@@ -1,0 +1,38 @@
+#!/usr/bin/env python3
+
+import json
+from pathlib import Path
+
+from mako.template import Template
+
+from videos_processing import Video
+
+def all_videos(metadata_directory):
+    directory = Path(metadata_directory)
+    file_paths = sorted(directory.glob("*.json"))
+    return [load_video(fn) for fn in file_paths]
+
+def load_video(file_path):
+    return Video.from_dict(json.loads(file_path.read_text()))
+
+if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Generate an HTML page displaying video data.')
+    parser.add_argument('metadata_directory',
+        help='The directory in which video metadata is saved.')
+    parser.add_argument('thumbnails_directory',
+        help='The directory in which thumbnails are saved.')
+    parser.add_argument('template_filename',
+        help='The filename of the template to render.')
+    parser.add_argument('rendered_filename',
+        help='The name of the file to render the HTML to.')
+
+    args = parser.parse_args()
+
+    template = Template(filename=args.template_filename)
+    videos = all_videos(args.metadata_directory)
+    html = template.render(videos=videos, thumbnails_directory=args.thumbnails_directory)
+
+    with open(args.rendered_filename, mode='w') as f:
+        f.write(html)

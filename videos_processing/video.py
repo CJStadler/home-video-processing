@@ -20,6 +20,9 @@ class Video:
 
         self.filename = filename
 
+    def title(self):
+        return self.filename.split("/")[-1].replace('_', ' ').replace('.mp4', '')
+
     def to_dict(self):
         return {
             "filename": self.filename,
