@@ -28,3 +28,11 @@ The videos themselves are stored in `data/originals`.
 
 Use [media fragment](https://www.w3.org/TR/media-frags/) to specify video
 segments: `#t=start,end`.
+
+## Misc
+
+Use `ffmpeg` to make clips:
+
+```
+ffmpeg -ss 00:50:07 -t 00:00:20 -i originals/09_Summer_1999_-_Xmas_2000.mp4 -c copy pokemon_pwinta.mp4
+```
